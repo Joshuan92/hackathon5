@@ -3,9 +3,8 @@ import Flight from "./Flight.jsx";
 import Droplist from "./Droplist.jsx";
 import { Nav, Spinner, Button } from "reactstrap";
 import { airportTo, airportFrom } from "./Airports.js";
-import DirectFlightsCheckbox from './DirectFlightsCheckbox.jsx'
-
-
+import DirectFlightsCheckbox from "./DirectFlightsCheckbox.jsx";
+import Pagination from "./Pagination.jsx";
 
 const App = () => {
   const [flightData, setFlightData] = useState([]);
@@ -14,8 +13,11 @@ const App = () => {
   const [searchDirect, setSearchDirect] = useState(false);
   const [searchStatus, setSearchStatus] = useState("initial")
 
-  let URL =
-  `https://api.skypicker.com/flights?flyFrom=${airportFrom[flyFrom]}&to=${airportTo[flyTo]}&dateFrom=18/11/2019&dateTo=12/12/2019&partner=picky&limit=10&direct_flights=${+searchDirect}`;
+  let URL = `https://api.skypicker.com/flights?flyFrom=${
+    airportFrom[flyFrom]
+  }&to=${
+    airportTo[flyTo]
+  }&dateFrom=18/11/2019&dateTo=12/12/2019&partner=picky&limit=10&direct_flights=${+searchDirect}`;
 
   useEffect(() => {
    console.log("pes");
@@ -25,6 +27,7 @@ const App = () => {
     setSearchStatus("searching")
     await fetch(URL)
       .then(resp => resp.json())
+<<<<<<< HEAD
       .then(resp => setFlightData(resp))
 
       setSearchStatus("done");
@@ -34,6 +37,15 @@ const App = () => {
     setSearchDirect(prev => !prev)
     
   }
+=======
+      .then(resp => setFlightData(resp));
+  };
+
+  const toggleIsDirect = () => {
+    //communication with LogoutPopup component
+    setSearchDirect(prev => !prev);
+  };
+>>>>>>> bitchbranch
 
   const checkSearch = () => {
     if (searchStatus === "initial") {
@@ -54,7 +66,6 @@ const App = () => {
   let flights = checkSearch();
 
   return (
-
     <>
       <Nav>
         <Droplist
@@ -70,14 +81,18 @@ const App = () => {
           setAirport={setFlyTo}
         />
         <DirectFlightsCheckbox
-        isDirect={searchDirect}
-        toggleIsDirect={toggleIsDirect}
+          isDirect={searchDirect}
+          toggleIsDirect={toggleIsDirect}
         />
       </Nav>
-      <Button color="primary" onClick={handleSearch}>Search</Button>
-      <div className='container'>
-        <div>{flights}</div>
-      </div>
+      <Button color='primary' onClick={handleSearch}>
+        Search
+      </Button>
+      <Pagination data={flightData}>
+        <div className='container'>
+          <div>{flights}</div>
+        </div>
+      </Pagination>
     </>
   );
 };
