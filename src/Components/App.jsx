@@ -12,39 +12,46 @@ const App = () => {
   const [flyTo, setFlyTo] = useState();
   const [flyFrom, setFlyFrom] = useState();
   const [searchDirect, setSearchDirect] = useState(false);
+  const [searchStatus, setSearchStatus] = useState("initial")
 
   let URL =
   `https://api.skypicker.com/flights?flyFrom=${airportFrom[flyFrom]}&to=${airportTo[flyTo]}&dateFrom=18/11/2019&dateTo=12/12/2019&partner=picky&limit=10&direct_flights=${+searchDirect}`;
 
-  // useEffect(() => {
-  //   fetch(URL)
-  //     .then(resp => resp.json())
-  //     .then(resp => setFlightData(resp));
-  // }, []);
-
   useEffect(() => {
-    console.log(URL);
+   console.log("pes");
   });
 
-  const handleSearch = () => {
-    fetch(URL)
+  async function handleSearch() {
+    setSearchStatus("searching")
+    await fetch(URL)
       .then(resp => resp.json())
-      .then(resp => setFlightData(resp));
+      .then(resp => setFlightData(resp))
+
+      setSearchStatus("done");
   }
 
-  const toggleIsDirect = () => { //communication with LogoutPopup component
+  const toggleIsDirect = () => {
     setSearchDirect(prev => !prev)
     
   }
 
-  const flights =
-    flightData.length !== 0 ? (
-      flightData.data.map((flight, index) => (
+  const checkSearch = () => {
+    if (searchStatus === "initial") {
+      return "Choose a flight"
+    } else if (searchStatus === "searching") {
+      return <Spinner color='dark' />
+    } else if (flightData.data.length !== 0) {
+      return flightData.data.map((flight, index) => (
         <Flight flightData={flight} key={index} />
       ))
-    ) : (
-      <Spinner color='dark' />
-    );
+    } else if (flightData.data.length === 0) {
+      return "no flights found"
+    } else {
+      return "error"
+    }
+  }
+
+  let flights = checkSearch();
 
   return (
 

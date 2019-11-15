@@ -10,7 +10,7 @@ const airportFrom = {
   Prague: "PRG",
   Berlin: "BER",
   Warsaw: "WAW",
-  Warsaw: "PED"
+  Pardubice: "PED"
 };
 
 export { airportTo, airportFrom };
