@@ -1,22 +1,41 @@
 import React, { useEffect, useState } from "react";
 import Flight from "./Flight.jsx";
 import Droplist from "./Droplist.jsx";
-import { Nav, Spinner } from "reactstrap";
+import { Nav, Spinner, Button } from "reactstrap";
 import { airportTo, airportFrom } from "./Airports.js";
+import DirectFlightsCheckbox from './DirectFlightsCheckbox.jsx'
 
-const URL =
-  "https://api.skypicker.com/flights?flyFrom=PRG&to=LGW&dateFrom=18/11/2019&dateTo=12/12/2019&partner=picky&limit=10&direct_flights=1";
+
 
 const App = () => {
   const [flightData, setFlightData] = useState([]);
   const [flyTo, setFlyTo] = useState();
   const [flyFrom, setFlyFrom] = useState();
+  const [searchDirect, setSearchDirect] = useState(false);
+
+  let URL =
+  `https://api.skypicker.com/flights?flyFrom=${airportFrom[flyFrom]}&to=${airportTo[flyTo]}&dateFrom=18/11/2019&dateTo=12/12/2019&partner=picky&limit=10&direct_flights=${+searchDirect}`;
+
+  // useEffect(() => {
+  //   fetch(URL)
+  //     .then(resp => resp.json())
+  //     .then(resp => setFlightData(resp));
+  // }, []);
 
   useEffect(() => {
+    console.log(URL);
+  });
+
+  const handleSearch = () => {
     fetch(URL)
       .then(resp => resp.json())
       .then(resp => setFlightData(resp));
-  }, []);
+  }
+
+  const toggleIsDirect = () => { //communication with LogoutPopup component
+    setSearchDirect(prev => !prev)
+    
+  }
 
   const flights =
     flightData.length !== 0 ? (
@@ -28,6 +47,7 @@ const App = () => {
     );
 
   return (
+
     <>
       <Nav>
         <Droplist
@@ -42,7 +62,12 @@ const App = () => {
           options={Object.keys(airportTo)}
           setAirport={setFlyTo}
         />
+        <DirectFlightsCheckbox
+        isDirect={searchDirect}
+        toggleIsDirect={toggleIsDirect}
+        />
       </Nav>
+      <Button color="primary" onClick={handleSearch}>Search</Button>
       <div className='container'>
         <div>{flights}</div>
       </div>
