@@ -4,7 +4,6 @@ import Droplist from "./Droplist.jsx";
 import { Nav, Spinner, Button } from "reactstrap";
 import { airportTo, airportFrom } from "./Airports.js";
 import DirectFlightsCheckbox from "./DirectFlightsCheckbox.jsx";
-import Pagination from "./Pagination.jsx";
 
 const App = () => {
   const [flightData, setFlightData] = useState([]);
@@ -12,16 +11,17 @@ const App = () => {
   const [flyFrom, setFlyFrom] = useState();
   const [searchDirect, setSearchDirect] = useState(false);
   const [searchStatus, setSearchStatus] = useState("initial")
+  const [limit, setLimit] = useState(5)
 
   let URL = `https://api.skypicker.com/flights?flyFrom=${
     airportFrom[flyFrom]
   }&to=${
     airportTo[flyTo]
-  }&dateFrom=18/11/2019&dateTo=12/12/2019&partner=picky&limit=10&direct_flights=${+searchDirect}`;
+  }&dateFrom=18/11/2019&dateTo=12/12/2019&partner=picky&direct_flights=${+searchDirect}`;
 
-  useEffect(() => {
-   console.log("pes");
-  });
+  // useEffect(() => {
+  //  flightData.length !== 0 ? console.log(flightData.data.length) : null;
+  // });
 
   async function handleSearch() {
     setSearchStatus("searching")
@@ -32,9 +32,20 @@ const App = () => {
       setSearchStatus("done");
   }
 
+  const handleNext = () => {
+    if (flightData.data.length >= limit) {
+      setLimit(limit + 5)
+    } 
+  }
+
+  const handlePrev = () => {
+    if (limit - 5 >= 5) {
+      setLimit(limit - 5)
+    }
+  }
+
   const toggleIsDirect = () => {
-    setSearchDirect(prev => !prev)
-    
+    setSearchDirect(prev => !prev)  
   }
 
   const checkSearch = () => {
@@ -43,9 +54,13 @@ const App = () => {
     } else if (searchStatus === "searching") {
       return <Spinner color='dark' />
     } else if (flightData.data.length !== 0) {
-      return flightData.data.slice(0,1).map((flight, index) => (
+      return (
+        <>
+        <p>Found {flightData.data.length} flights</p>
+        {flightData.data.slice(limit - 5,limit).map((flight, index) => (
         <Flight flightData={flight} key={index} />
-      ))
+      ))}
+      </>)
     } else if (flightData.data.length === 0) {
       return "no flights found"
     } else {
@@ -54,6 +69,8 @@ const App = () => {
   }
 
   let flights = checkSearch();
+
+  let pagination = searchStatus === "done" ?  <><Button color='danger' onClick={handlePrev}>Previous</Button><Button color='danger' onClick={handleNext}>Next</Button></> : ""
 
   return (
     <>
@@ -81,7 +98,7 @@ const App = () => {
         <div className='container'>
           <div>{flights}</div>
         </div>
-
+        {pagination}
     </>
   );
 };

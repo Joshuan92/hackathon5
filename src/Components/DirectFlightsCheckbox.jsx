@@ -3,7 +3,7 @@ import { Button } from 'reactstrap';
 
 const DirectFlightsCheckbox = (props) => {
   return (
-      <Button color={props.isDirect ? "primary" : "secondary"} onClick={props.toggleIsDirect}>Direct Flights only</Button>
+      <Button color={props.isDirect ? "success" : "secondary"} onClick={props.toggleIsDirect}>Direct Flights only</Button>
     );
   }
   
