@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Flight from "./Flight.jsx";
 import Droplist from "./Droplist.jsx";
-import { Nav, Spinner, Button } from "reactstrap";
+import { Nav, Spinner, Button, Table } from "reactstrap";
 import { airportTo, airportFrom } from "./Airports.js";
 import DirectFlightsCheckbox from "./DirectFlightsCheckbox.jsx";
 
@@ -57,9 +57,26 @@ const App = () => {
       return (
         <>
         <p>Found {flightData.data.length} flights</p>
-        {flightData.data.slice(limit - 5,limit).map((flight, index) => (
-        <Flight flightData={flight} key={index} />
-      ))}
+<div className="container">
+          <Table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Flight from</th>
+            <th>Layovers</th>
+            <th>Flight to</th>
+            <th>Departure time</th>
+            <th>Arrival time</th>
+            <th>Price</th>
+          </tr>
+        </thead>
+        <tbody>
+          {flightData.data.slice(limit - 5,limit).map((flight, index) => (
+          <Flight flightData={flight} key={index} index={index+limit -5}/>
+        ))}
+              </tbody>
+      </Table>
+</div>
       </>)
     } else if (flightData.data.length === 0) {
       return "no flights found"
