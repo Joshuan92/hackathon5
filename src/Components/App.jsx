@@ -19,9 +19,17 @@ const flights = flightData.length !== 0? flightData.data.map((flight, index) =>(
  )) : 'loading';
 
   return (
-    <div className="container">
-      <div>{flights}</div>
-    </div>
+<>
+        <Droplist
+        title={'Fly from'}
+        />
+        <Droplist
+        title={'Fly to'}
+        />
+        <div className="container">
+          <div>{flights}</div>
+        </div>
+</>
   );
 };
 
