@@ -7,10 +7,8 @@ const Flight = (props) => {
 const { flightData } = props
 
 const departureTime = DateTime.fromMillis(flightData.dTime * 1000).toFormat('dd/LL/yyyy hh:mm')
-console.log(departureTime);
 
 const arrivalTime = DateTime.fromMillis(flightData.aTime * 1000).toFormat('dd/LL/yyyy hh:mm')
-console.log(departureTime);
 
 const transfers = flightData.route.length > 1 ? <p>Transfers: {flightData.route.slice(1).map(flight => flight.cityFrom) + ' '}</p>:null
 
