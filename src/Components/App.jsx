@@ -10,8 +10,8 @@ const App = () => {
   const [flyTo, setFlyTo] = useState();
   const [flyFrom, setFlyFrom] = useState();
   const [searchDirect, setSearchDirect] = useState(false);
-  const [searchStatus, setSearchStatus] = useState("initial")
-  const [limit, setLimit] = useState(5)
+  const [searchStatus, setSearchStatus] = useState("initial");
+  const [limit, setLimit] = useState(5);
 
   let URL = `https://api.skypicker.com/flights?flyFrom=${
     airportFrom[flyFrom]
@@ -24,70 +24,89 @@ const App = () => {
   // });
 
   async function handleSearch() {
-    setSearchStatus("searching")
+    setSearchStatus("searching");
     await fetch(URL)
       .then(resp => resp.json())
-      .then(resp => setFlightData(resp))
+      .then(resp => setFlightData(resp));
 
-      setSearchStatus("done");
+    setSearchStatus("done");
   }
 
   const handleNext = () => {
     if (flightData.data.length >= limit) {
-      setLimit(limit + 5)
-    } 
-  }
+      setLimit(limit + 5);
+    }
+  };
 
   const handlePrev = () => {
     if (limit - 5 >= 5) {
-      setLimit(limit - 5)
+      setLimit(limit - 5);
     }
-  }
+  };
 
   const toggleIsDirect = () => {
-    setSearchDirect(prev => !prev)  
-  }
+    setSearchDirect(prev => !prev);
+  };
 
   const checkSearch = () => {
     if (searchStatus === "initial") {
-      return "Choose a flight"
+      return "Choose a flight";
     } else if (searchStatus === "searching") {
-      return <Spinner color='dark' />
+      return <Spinner color='dark' />;
     } else if (flightData.data.length !== 0) {
       return (
         <>
-        <p>Found {flightData.data.length} flights</p>
-<div className="container">
-          <Table>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Flight from</th>
-            <th>Layovers</th>
-            <th>Flight to</th>
-            <th>Departure time</th>
-            <th>Arrival time</th>
-            <th>Price</th>
-          </tr>
-        </thead>
-        <tbody>
-          {flightData.data.slice(limit - 5,limit).map((flight, index) => (
-          <Flight flightData={flight} key={index} index={index+limit -5}/>
-        ))}
+          <p>Found {flightData.data.length} flights</p>
+          <div className='container'>
+            <Table hover>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Flight from</th>
+                  <th>Layovers</th>
+                  <th>Flight to</th>
+                  <th>Departure time</th>
+                  <th>Arrival time</th>
+                  <th>Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {flightData.data
+                  .slice(limit - 5, limit)
+                  .map((flight, index) => (
+                    <Flight
+                      flightData={flight}
+                      key={index}
+                      index={index + limit - 5}
+                    />
+                  ))}
               </tbody>
-      </Table>
-</div>
-      </>)
+            </Table>
+          </div>
+        </>
+      );
     } else if (flightData.data.length === 0) {
-      return "no flights found"
+      return "no flights found";
     } else {
-      return "error"
+      return "error";
     }
-  }
+  };
 
   let flights = checkSearch();
 
-  let pagination = searchStatus === "done" ?  <><Button color='danger' onClick={handlePrev}>Previous</Button><Button color='danger' onClick={handleNext}>Next</Button></> : ""
+  let pagination =
+    searchStatus === "done" ? (
+      <>
+        <Button color='danger' onClick={handlePrev}>
+          Previous
+        </Button>
+        <Button color='danger' onClick={handleNext}>
+          Next
+        </Button>
+      </>
+    ) : (
+      ""
+    );
 
   return (
     <>
@@ -112,10 +131,10 @@ const App = () => {
       <Button color='primary' onClick={handleSearch}>
         Search
       </Button>
-        <div className='container'>
-          <div>{flights}</div>
-        </div>
-        {pagination}
+      <div className='container'>
+        <div>{flights}</div>
+      </div>
+      {pagination}
     </>
   );
 };

@@ -5,7 +5,7 @@ import { DateTime } from 'luxon';
 
 const Flight = (props) => {
 
-const { flightData, key, index } = props
+const { flightData, index } = props
 
 const departureTime = DateTime.fromMillis(flightData.dTime * 1000).toFormat('dd/LL/yyyy hh:mm')
 
@@ -13,8 +13,6 @@ const arrivalTime = DateTime.fromMillis(flightData.aTime * 1000).toFormat('dd/L
 
 const transfers = flightData.route.length > 1 ? <p> {flightData.route.slice(1).map(flight => flight.cityFrom) + ' '}</p>:null
 
-
-console.log(index);
 
   return (
 
