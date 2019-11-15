@@ -1,15 +1,29 @@
-// You should always display at least time of departure and arrival in local time, name of the origin and departure & price for the flight
-
 import React, { useEffect, useState } from "react";
+import { DateTime } from 'luxon';
 
 
 const Flight = (props) => {
 
 const { flightData } = props
 
+const departureTime = DateTime.fromMillis(flightData.dTime * 1000).toFormat('dd/LL/yyyy hh:mm')
+console.log(departureTime);
+
+const arrivalTime = DateTime.fromMillis(flightData.aTime * 1000).toFormat('dd/LL/yyyy hh:mm')
+console.log(departureTime);
+
+const transfers = flightData.route.length > 1 ? <p>Transfers: {flightData.route.slice(1).map(flight => flight.cityFrom) + ' '}</p>:null
+
+
+
   return (
-    <div>
-        <p>{flightData.price}</p>
+    <div className="flightDetail">
+        <p>From: {flightData.cityFrom}</p>
+        {transfers}
+        <p>To: {flightData.cityTo}</p>
+        <p>Departure time: {departureTime} ({flightData.cityFrom} time)</p>
+        <p>Arrival time: {arrivalTime} ({flightData.cityTo} time)</p>
+        <p>Price: {flightData.price}€</p>
     </div>
 
   );
