@@ -43,7 +43,7 @@ const App = () => {
     } else if (searchStatus === "searching") {
       return <Spinner color='dark' />
     } else if (flightData.data.length !== 0) {
-      return flightData.data.map((flight, index) => (
+      return flightData.data.slice(0,1).map((flight, index) => (
         <Flight flightData={flight} key={index} />
       ))
     } else if (flightData.data.length === 0) {
@@ -78,11 +78,10 @@ const App = () => {
       <Button color='primary' onClick={handleSearch}>
         Search
       </Button>
-      <Pagination data={flightData}>
         <div className='container'>
           <div>{flights}</div>
         </div>
-      </Pagination>
+
     </>
   );
 };

@@ -1,87 +1,79 @@
 import React from "react";
 
 class Pagination extends React.Component {
-    constructor(props, context) {
-      super(props, context);
-      this.state = {
-        currentPage: null,
-        pageCount: null
-      }
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      currentPage: null,
+      pageCount: null,
+      pageSize: 5
+    };
+  }
+
+  componentDidMount() {
+    //   const startingPage = this.props.startingPage
+    //     ? this.props.startingPage
+    //     : 1;
+    const startingPage = 1;
+    const data = this.props.data;
+    const pageSize = this.state.pageSize;
+    let pageCount = parseInt(data.length / pageSize);
+    if (data.length % pageSize > 0) {
+      pageCount++;
     }
-    
-    componentWillMount() {
-      const startingPage = this.props.startingPage
-        ? this.props.startingPage
-        : 1;
-      const data = this.props.data;
-      const pageSize = this.props.pageSize;
-      let pageCount = parseInt(data.length / pageSize);
-      if (data.length % pageSize > 0) {
-        pageCount++;
-      }
-      this.setState({
-        currentPage: startingPage,
-        pageCount: pageCount
-      });
-    }
-    
-    setCurrentPage(num) {
-      this.setState({currentPage: num});
-    }
-  
-    createControls() {
-      let controls = [];
-      const pageCount = this.state.pageCount;
-      for (let i = 1; i <= pageCount; i++) {
-        const baseClassName = 'pagination-controls__button';
-        const activeClassName = i === this.state.currentPage ? `${baseClassName}--active` : '';
-        controls.push(
-          <div
-            className={`${baseClassName} ${activeClassName}`}
-            onClick={() => this.setCurrentPage(i)}
-          >
-            {i}
-          </div>
-        );
-      }
-      return controls;
-    }
-  
-    createPaginatedData() {
-        console.log(this.props.data);
-        
-      const data = this.props.data;
-      const pageSize = this.props.pageSize;
-      const currentPage = this.state.currentPage;
-      const upperLimit = currentPage * pageSize;
-      const dataSlice = data.slice((upperLimit - pageSize), upperLimit);
-      return dataSlice;
-    }
-  
-    render() {
-      return (
-        <div className='pagination'>
-          <div className='pagination-controls'>
-            {this.createControls()}
-          </div>
-          <div className='pagination-results'>
-            {React.cloneElement(this.props.children, {data: this.createPaginatedData()})}
-          </div>
+    this.setState({
+      currentPage: startingPage,
+      pageCount: pageCount
+    });
+  }
+
+  setCurrentPage(num) {
+    this.setState({ currentPage: num });
+  }
+
+  createControls() {
+    let controls = [];
+    const pageCount = this.state.pageCount;
+    for (let i = 1; i <= pageCount; i++) {
+      const baseClassName = "pagination-controls__button";
+      const activeClassName =
+        i === this.state.currentPage ? `${baseClassName}--active` : "";
+      controls.push(
+        <div
+          className={`${baseClassName} ${activeClassName}`}
+          onClick={() => this.setCurrentPage(i)}
+        >
+          {i}
         </div>
       );
     }
-  
-  
-//   Pagination.propTypes = {
-//     data: React.PropTypes.array.isRequired,
-//     pageSize: React.PropTypes.number.isRequired,
-//     startingPage: React.PropTypes.number.isRequired
-//   };
-  
-//   Pagination.defaultProps = {
-//     pageSize: 25,
-//     startingPage: 1
-//   };
+    return controls;
+  }
+
+  createPaginatedData() {
+    const data = this.props.data;
+    const pageSize = this.state.pageSize;
+    const currentPage = this.state.currentPage;
+    const upperLimit = currentPage * pageSize;
+    const dataSlice = data.slice(upperLimit - pageSize, upperLimit);
+    console.log(dataSlice);
+    
+    return dataSlice;
+  }
+
+  render() {
+    return (
+      <div className='pagination'>
+        <div className='pagination-controls'>{this.createControls()}</div>
+        <div className='pagination-results'>
+          {React.cloneElement(this.props.children, {
+            data: this.createPaginatedData()
+          })}
+        </div>
+      </div>
+    );
+  }
+
 }
 export default Pagination;
 //   class Example extends React.Component {
@@ -100,7 +92,7 @@ export default Pagination;
 //       );
 //     }
 //   }
-  
+
 //   class App extends React.Component {
 //     render() {
 //       return (
@@ -112,9 +104,19 @@ export default Pagination;
 //       );
 //     }
 //   }
-  
+
 //   ReactDOM.render(
 //     <App />,
 //     document.getElementById('app')
 //   );
-  
+
+  //   Pagination.propTypes = {
+  //     data: React.PropTypes.array.isRequired,
+  //     pageSize: React.PropTypes.number.isRequired,
+  //     startingPage: React.PropTypes.number.isRequired
+  //   };
+
+  //   Pagination.defaultProps = {
+  //     pageSize: 25,
+  //     startingPage: 1
+  //   };
