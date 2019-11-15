@@ -27,7 +27,6 @@ const App = () => {
     setSearchStatus("searching")
     await fetch(URL)
       .then(resp => resp.json())
-<<<<<<< HEAD
       .then(resp => setFlightData(resp))
 
       setSearchStatus("done");
@@ -37,15 +36,6 @@ const App = () => {
     setSearchDirect(prev => !prev)
     
   }
-=======
-      .then(resp => setFlightData(resp));
-  };
-
-  const toggleIsDirect = () => {
-    //communication with LogoutPopup component
-    setSearchDirect(prev => !prev);
-  };
->>>>>>> bitchbranch
 
   const checkSearch = () => {
     if (searchStatus === "initial") {
