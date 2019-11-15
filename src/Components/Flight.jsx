@@ -30,3 +30,4 @@ const transfers = flightData.route.length > 1 ? <p>Transfers: {flightData.route.
 };
 
 export default Flight;
+
