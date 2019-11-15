@@ -10,9 +10,11 @@ const { flightData } = props
   return (
     <div>
         <p>{flightData.price}</p>
+
     </div>
 
   );
 };
 
 export default Flight;
+
